@@ -56,6 +56,13 @@ export class Game {
     this.bindEvents();
   }
   
+  private checkSceneChange(): void {
+    const currentSceneType = this.sceneManager.getCurrentSceneType();
+    if (currentSceneType !== this.gameState.currentScene) {
+      this.sceneManager.changeScene(this.gameState.currentScene, this.gameState);
+    }
+  }
+  
   private bindEvents(): void {
     this.canvas.addEventListener('click', (e) => {
       const rect = this.canvas.getBoundingClientRect();
@@ -65,6 +72,7 @@ export class Game {
       const y = (e.clientY - rect.top) * scaleY;
       
       this.sceneManager.handleClick(x, y, this.gameState);
+      this.checkSceneChange();
     });
     
     this.canvas.addEventListener('mousemove', (e) => {
@@ -79,6 +87,7 @@ export class Game {
     
     document.addEventListener('keydown', (e) => {
       this.sceneManager.handleKeyPress(e.key, this.gameState);
+      this.checkSceneChange();
     });
     
     window.addEventListener('beforeunload', () => {
@@ -135,6 +144,7 @@ export class Game {
   
   private update(deltaTime: number): void {
     this.sceneManager.update(deltaTime, this.gameState);
+    this.checkSceneChange();
   }
   
   private render(): void {

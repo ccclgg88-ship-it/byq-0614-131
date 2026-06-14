@@ -374,6 +374,29 @@ export class MainScene implements Scene {
       this.onButtonClick('start', gameState);
       return;
     }
+    
+    const panelX = 980;
+    const panelY = 20;
+    const panelW = 280;
+    const panelH = 400;
+    
+    if (isPointInRect(x, y, panelX, panelY, panelW, panelH)) {
+      const tasks = gameState.tasks;
+      for (let i = 0; i < tasks.length; i++) {
+        const taskY = panelY + 80 + i * 100;
+        const taskH = 85;
+        if (isPointInRect(x, y, panelX + 15, taskY, panelW - 30, taskH)) {
+          if (!tasks[i].completed) {
+            gameState.selectedTask = tasks[i];
+            this.onButtonClick('start', gameState);
+          }
+          return;
+        }
+      }
+      
+      this.onButtonClick('tasks', gameState);
+      return;
+    }
   }
   
   handleKeyPress(key: string, gameState: GameState): void {}
